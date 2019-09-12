@@ -2,19 +2,21 @@
   <div>
     <van-submit-bar
     class="handleSumbmit"
-    v-show="show"
+    v-if="show"
     :price="3050"
     button-text="结算"
     @submit="onSubmit">
     <van-checkbox class="selectAll" v-model="checked">全选</van-checkbox>
-    <span slot="tip">
+    <!-- <span slot="tip">
       你的收货地址不支持同城送, <span>修改地址</span>
-    </span>
+    </span> -->
     </van-submit-bar >
     <van-submit-bar
-    v-show="!show"
+    else="show"
     button-text="删除"
-    @click="deleteShop"/>
+    @click="deleteShop">
+    <van-checkbox class="deleteAll" v-model="checked">全选</van-checkbox>
+    </van-submit-bar>
   </div>
 </template>
 
@@ -29,13 +31,20 @@ export default {
     }
   },
   created () {
-    globalBus.$on('handle-edit', (data) => { this.show = data })
+    this.handleEdit()
   },
   methods: {
     // 结算
     onSubmit () {
     },
     deleteShop () {
+      // return globalBus.$on('')
+    },
+    // 编辑状态显示删除按钮
+    handleEdit () {
+      return globalBus.$on('handle-edit', (data) => {
+        this.show = data
+      })
     }
   }
 }
@@ -49,6 +58,13 @@ export default {
   z-index: 9999;
 }
 .selectAll {
-  padding-left: 20px;
+  padding-left: 50px;
+}
+.van-submit-bar__bar {
+  position: relative;
+}
+.van-submit-bar__bar .deleteAll {
+  position: absolute;
+  left: 50px;
 }
 </style>
