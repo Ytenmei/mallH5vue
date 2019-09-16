@@ -6,7 +6,7 @@
     :price="3050"
     button-text="结算"
     @submit="onSubmit">
-    <van-checkbox class="selectAll" v-model="checked">全选</van-checkbox>
+    <van-checkbox class="selectAll" @click="checkAll(checked)" v-model="checked">全选</van-checkbox>
     <!-- <span slot="tip">
       你的收货地址不支持同城送, <span>修改地址</span>
     </span> -->
@@ -15,7 +15,7 @@
     else="show"
     button-text="删除"
     @click="deleteShop">
-    <van-checkbox class="deleteAll" v-model="checked">全选</van-checkbox>
+    <van-checkbox class="deleteAll" @click="checkAll()" v-model="checked">全选</van-checkbox>
     </van-submit-bar>
   </div>
 </template>
@@ -45,6 +45,9 @@ export default {
       return globalBus.$on('handle-edit', (data) => {
         this.show = data
       })
+    },
+    checkAll (item) {
+      globalBus.$emit('checkAll', item)
     }
   }
 }

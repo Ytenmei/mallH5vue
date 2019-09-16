@@ -8,6 +8,7 @@
         <!-- 商店全选 -->
         <van-checkbox
         checked-color="red"
+        @click="checkShop(item)"
         v-model="item.checked"
         >
         </van-checkbox>
@@ -92,17 +93,25 @@ export default {
       allCount: 0 // 被选中的产品数量
     }
   },
+  computed: {
+
+  },
   methods: {
     // 单选
     ischeck (item, pro) {
+      console.log(pro.isChecked)
       !pro.isChecked ? this.checkTrue(item, pro) : this.checkFalse(item, pro)
+    },
+    // 商店全选
+    checkShop (item) {
+      !item.checked ? this.shopTure(item) : this.shopFalse(item)
     },
     // 单个商品的状态
     checkTrue (item, pro) {
       pro.isChecked = true
       // 商店的状态
       if (++item.checkedCount === item.productList.length) {
-        this.checked = true
+        item.checked = true
       } else {
         return ''
       }
@@ -116,6 +125,7 @@ export default {
         return ''
       }
     },
+    // 单个商品的状态
     checkFalse (item, pro) {
       pro.isChecked = false
       --item.checkedCount
@@ -124,6 +134,29 @@ export default {
         --this.allShops
       }
       this.isCheckAll = false
+    },
+    // 商店的全选状态
+    shopTure (item) {
+      item.productList.forEach(pro => {
+        if (pro.isChecked === false) {
+          this.checkTrue(item, pro)
+        } else {
+          return ''
+        }
+      })
+    },
+    // 商店的全选状态
+    shopFalse (item) {
+      item.productList.forEach(pro => {
+        if (pro.isChecked === true) {
+          this.checkFalse(item, pro)
+        } else {
+          return ''
+        }
+      })
+    },
+    checkAll () {
+
     }
   }
 }
