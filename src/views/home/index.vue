@@ -9,7 +9,7 @@
       :border="false"
       right-text="登录"
       @click-right="$router.push({ name: 'login' })"/>
-      <van-icon class="bars"  name="bars" slot="left"></van-icon>
+      <van-icon fixed class="bars"  name="bars" slot="left"></van-icon>
     </div>
 
     <!-- 跳转搜索页 -->
@@ -114,5 +114,6 @@ export default {
   left: 20px;
   top: 20px;
   z-index: 1;
+  position: fixed;
 }
 </style>

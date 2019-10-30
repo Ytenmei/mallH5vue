@@ -42,17 +42,17 @@ export default new Router({
     },
     {
       name: 'order-sure',
-      path: '/order-sure/q',
+      path: '/order-sure/:q',
       component: () => import('@/views/order-sure')
     },
     {
       name: 'commondity-detail',
-      path: '/commondity-detail/q',
+      path: '/commondity-detail/:q',
       component: () => import('@/views/commondity-detail')
     },
     {
       name: 'commodity',
-      path: '/commodity/q',
+      path: '/commodity/:q',
       component: () => import('@/views/search')
     },
     {
