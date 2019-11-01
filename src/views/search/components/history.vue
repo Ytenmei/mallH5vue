@@ -55,6 +55,7 @@ export default {
   }
   .history-list {
     display: flex;
+    font-size: 22px;
     flex-wrap: wrap;
   }
   .history-item {
@@ -64,6 +65,7 @@ export default {
     margin: 0 10px 10px 15px;
     clear: #686868;
     color:#101010 ;
+    font-size: 24px;
   }
   .loading-container {
     padding: 10px 0;

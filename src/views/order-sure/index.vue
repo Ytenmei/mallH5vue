@@ -6,16 +6,21 @@
         <van-icon name="wap-nav" size="60" slot="right" color="#444" />
       </van-nav-bar>
     <!-- 收货地址  -->
-    <div class="addRessList"  @click="editRessList">
+    <div
+    v-if="!isHaveAddress"
+    class="addRessList"
+    @click="this.$router.push({
+      name: 'addressList'
+    })">
       <div class="location">
         <van-icon name="location" size="60" color="#444" />
       </div>
       <div class="userInfo">
-        <span>收货人：南墙先生</span>
-        <span>18806030603</span>
+        <span>{{defaulAddress.aRealName}}</span>
+        <span>{{defaulAddress.aMobilePhone}}</span>
       </div>
       <div class="address">
-        <span>收货地址：北京市海淀区悟空送大萨达撒多撒多撒多</span>
+        <span>收货地址：{{defaulAddress.aAddress}}</span>
       </div>
       <div class="promptRess">
         <span>(收货不便时，可选择免费代收货服务)</span>
@@ -24,14 +29,20 @@
         <van-icon name="arrow" size="60" color="#444" />
       </div>
     </div>
+    <div
+    v-else
+    @click="this.$router.push({
+      name: 'addressList'
+    })"
+    class="addRessList select-address">选择其他收货地址</div>
     <!-- 商品信息 -->
     <div class="goodDesc">
       <van-card
-        num="2"
-        price="2.00"
-        desc="颜色：自由组合:尺寸170/m"
-        title="2件装夏季潮流青年圆领T恤纯色V领半袖体恤打底"
-        thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
+        :num="CreateCommonOrder.selectedNum"
+        :price="CreateCommonOrder.selectedSkuComb === undefined ? CreateCommonOrder.price : CreateCommonOrder.selectedSkuComb.price / 100 "
+        :desc="CreateCommonOrder.selectedSkuComb === undefined ? '' : CreateCommonOrder.selectedSkuComb.pCollection + '/' + CreateCommonOrder.selectedSkuComb.pCollectionId"
+        :title="SplitOrder.nameFull"
+        :thumb="SplitOrder.pictureDefault"
       />
     </div>
     <!-- 发票 -->
@@ -83,20 +94,55 @@
 </template>
 
 <script>
-import { toast } from '@/components/loading/index.js'
+// import { toast } from '@/components/loading/index.js'
+import {
+  GetAnyProfilesAddress // 用户地址列表
+} from '@/api/address/index.js'
 export default {
   name: 'order-sure',
   data () {
     return {
+      // 用户收货地址
+      userAddRess: {
+        name: '',
+        phone: '',
+        province: '',
+        city: '',
+        county: '',
+        detailAddRess: ''
+      },
       checked: false,
-      message: ''
+      message: '', // 买家留言
+      SplitOrder: JSON.parse(window.localStorage.getItem('SplitOrder')), // 跳转来的数据运费数据
+      CreateCommonOrder: JSON.parse(window.localStorage.getItem('CreateCommonOrder')), // 跳转来的创建订单数据
+      price: 0, // 价格
+      defaulAddress: '', // 用户默认地址
+      isHaveAddress: false // 是否有默认地址
     }
   },
+  created () {
+    this.GetUserAddRess()
+  },
   methods: {
-    editRessList () {
-      toast('支付中...', 'loading')
+    onSubmit () {
     },
-    onSubmit () {}
+    // 获取用户地址列表
+    async GetUserAddRess () {
+      const data = await GetAnyProfilesAddress()
+      // 没有地址
+      if (!data.length) {
+        this.isHaveAddress = true
+        return
+      }
+      const aIsDefault = data.filter(item => item.aIsDefault === true)
+      // 有地址，无默认
+      if (aIsDefault === []) {
+        this.isHaveAddress = true
+      } else {
+        // 有默认地址
+        this.defaulAddress = aIsDefault[0]
+      }
+    }
   }
 }
 </script>
@@ -153,6 +199,14 @@ export default {
 .userInfo span:nth-child(2) {
   display: inline-block;
   padding-left: 80px;
+  width: 180px;
+}
+/deep/.userInfo span:nth-child(1) {
+  display: inline-block;
+  width: 250px;
+  text-overflow: ellipsis;
+  -webkit-line-clamp:1;
+  -webkit-box-orient: vertical;
 }
 .userInfo {
   padding-top: 25px;
@@ -218,5 +272,11 @@ export default {
 .navbar {
   border-bottom: 1px solid #ccc;
 }
-
+.select-address {
+  color: #666;
+  font-size: 28px;
+  text-align: center;
+  align-items: center;
+  line-height: 200px;
+}
 </style>

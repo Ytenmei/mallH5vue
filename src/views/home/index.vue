@@ -41,11 +41,11 @@
       <van-swipe-item
       v-for="(image, index) in swiper"
       :key="index">
-        <img class="swiper" v-lazy="image">
+        <img class="swiper" v-lazy="image.imgUrl">
       </van-swipe-item>
     </van-swipe>
     <!-- 推荐 -->
-    <recommend/>
+    <recommend :recommend="recommen" />
     <tabBar/>
 </div>
 </template>
@@ -62,7 +62,8 @@ export default {
   },
   data () {
     return {
-      swiper: []
+      swiper: [],
+      recommen: ''
     }
   },
   created () {
@@ -71,10 +72,19 @@ export default {
   methods: {
     onClickLeft () {
     },
+    // 轮播图
     async handleSlider () {
-      let data = await getArticles()
-      data = data[0].nodeAdsList
-      data.filter(item => this.swiper.push(item.imgUrl))
+      const data = await getArticles()
+      data.filter(item => {
+        if (item.id === 1) {
+          this.swiper = item.nodeAdsList
+        }
+        if (item.id === 3) {
+          this.recommen = item.nodeAdsList
+        }
+      })
+    },
+    handleAssort () {
     }
   }
 }

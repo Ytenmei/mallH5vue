@@ -62,6 +62,7 @@ export default {
     margin: 0 10px 10px 15px;
     clear: #686868;
     color:#101010 ;
+    font-size: 22px;
   }
   .loading-container {
     padding: 10px 0;

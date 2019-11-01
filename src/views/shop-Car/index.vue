@@ -64,7 +64,7 @@
       <van-submit-bar
       else="cartStatus"
       button-text="删除"
-      @submit="deleteShop">
+      @submit="handledeleteShop">
       <van-checkbox checked-color="red"  class="deleteAll" @click="checkAll()" v-model="isCheckAll">全选</van-checkbox>
       </van-submit-bar>
     </div>
@@ -137,6 +137,8 @@ export default {
       }
     }
   },
+  computed: {
+  },
   methods: {
     // 编辑状态
     handleEdit (cartStatus) {
@@ -186,7 +188,19 @@ export default {
       })
     },
     // 删除
-    deleteShop () {
+    handledeleteShop () {
+      const isCheckAll = this.isCheckAll
+      const cartInfoList = this.cartInfoList.length
+      const allShops = this.allShops
+      // 全选
+      if (isCheckAll && cartInfoList === allShops) {
+        this.cartInfoList = []
+        this.isCheckAll = false
+      }
+      // 店铺
+      // this._.remove(this.cartInfoList, function (n) {
+      //   return n.checked === false
+      // })
     },
     checkTrue (item, pro) {
       pro.isChecked = true
@@ -244,6 +258,7 @@ export default {
   border-bottom: 5px solid #ccc;
 }
 .list-container {
+  font-size: 24px;
   width: 100%;
   height: 100%;
   background-color: #f0f0f2;
@@ -311,7 +326,7 @@ export default {
 }
 .priceValName {
   width: 300px;
-  height: 40px;
+  // height: 40px;
   display: inline-block;
   position: absolute;
   bottom: 70px;
@@ -320,7 +335,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp:2;
+  -webkit-line-clamp:1;
   -webkit-box-orient: vertical;
 }
 .price {
